@@ -142,15 +142,14 @@
     cursor: pointer; 
 } 
 .revjs-menu-content a { 
-    color: black; 
-     padding: 2px; 
-    text-decoration: none; 
+    color: black;
+    text-decoration: none;
     display: block; 
     width: inherit; 
     height: inherit; 
     font-size: 12px; 
-    font-family: system-ui !important; 
-    padding-left: 5px; 
+    font-family: system-ui !important;
+    padding: 2px 2px 2px 5px;
 } 
 .revjs-menu-content a:hover { 
     background-color: #2980B9;

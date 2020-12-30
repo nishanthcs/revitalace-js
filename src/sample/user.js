@@ -4,9 +4,6 @@
  * @author Nishanth
  */
 
-
-
-
 /*
  * initialize ace.
  */
@@ -52,19 +49,21 @@ editor.setOptions({
 		defs : defObject,
 		menu : [{
 			label : "File",
-			subMenu : [{label: "Find", shortCut: {mac : 'Cmd-f', win: 'Ctrl-f'}, trigger: function(e){
-				alert("FindClicked"+this.label);
+			subMenu : [{label: "Find", shortCut: {mac : 'Cmd-f', win: 'Ctrl-f'}, trigger: function(editor){
+				alert("Find clicked in editor with id "+editor.id);
 			}},
-				{label: "Completion", shortCut: {mac : 'Ctrl-Space', win: 'Ctrl-Space'}, trigger: function(e){alert("Completion clicked")}}]
+				{label: "Completion", shortCut: {mac : 'Ctrl-Space', win: 'Ctrl-Space'}, trigger: function(editor){alert("Completion clicked")}}]
 		},
 			{
 				label : "Edit",
-				subMenu : [{label: "Copy", shortCut: {mac : 'Cmd-f', win: 'Ctrl-f'}, trigger: function(e){alert("Copy Clicked")}},
-					{label: "Paste", shortCut: {mac : 'Ctrl-Space', win: 'Ctrl-Space'}, trigger: function(e){alert("Paste clicked")}}]
+				subMenu : [{label: "Copy", shortCut: {mac : 'Cmd-f', win: 'Ctrl-f'}, trigger: function(editor){alert("Copy Clicked")}},
+					{label: "Paste", shortCut: {mac : 'Ctrl-Space', win: 'Ctrl-Space'}, trigger: function(editor){alert("Paste clicked")}}]
 			}]
 	}
 });
 
+
+// Sample code in the demo
 editor.setValue("let aString = \"scott\";\n" +
 	"\n" +
 	"let aNumber = 7; \n" +
