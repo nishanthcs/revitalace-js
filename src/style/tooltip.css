@@ -1,0 +1,159 @@
+/**
+ * This is a sample CSS file that can be included and modified to change the look of tooltips, completion text etc.
+ */
+.ace_tooltip, .revjs-tooltip-main {
+    background-image: -webkit-linear-gradient(top, #1880b3 0%, #204b5d 100%);
+    background-image: -o-linear-gradient(top, #1880b3 0%, #204b5d 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#1880b3), to(#204b5d));
+    background-image: linear-gradient(to bottom, #1880b3 0%, #204b5d 100%);
+    color: white;
+    position: fixed;
+    padding: 6px;
+    z-index: 999999;
+    word-wrap: break-word;
+    line-height: normal;
+    font-style: normal;
+    font-weight: normal;
+    font-family: monospace;
+    border: none;
+    max-width: 30% !important;
+    min-width: 20% !important;
+    white-space: pre-wrap;
+    transition: opacity 1s;
+
+    -moz-transition: opacity 1s;
+    -webkit-transition: opacity 1s;
+    -o-transition: opacity 1s;
+    -ms-transition: opacity 1s;
+
+    border-bottom-right-radius: 10px;
+    -webkit-box-shadow: -6px 7px 6px -1px rgba(0,0,0,0.35);
+    -moz-box-shadow: -6px 7px 6px -1px rgba(0,0,0,0.35);
+    box-shadow: -6px 7px 6px -1px rgba(0,0,0,0.35);
+}
+
+.ace_text-layer {
+    width : 100%;
+}
+.ace_completion-meta {
+    opacity: 0.5;
+    float: right;
+    margin: unset;
+    margin-right: 5px;
+}
+
+.t2a-tooltip-docurl {
+    font-style: italic;
+    font-size: x-small;
+    color: rgb(128, 159, 191) !important;;
+}
+
+.t2a-doc-hr {
+    border: 0.25px solid;
+    border-radius: 20px;
+    color: white !important;
+}
+
+.t2a-tooltip-info {
+    font-style: italic;
+    font-size: x-small;
+    font-color: #57060b !important;
+    font-weight: normal;
+    text-align: right;
+}
+
+.t2a-tooltip-target {
+    cursor: pointer;
+    background-color: olivedrab;
+}
+
+.t2a-tooltip-target:hover {
+    background-color: cornflowerblue;
+}
+
+.t2a-doc-style {
+    max-width: 100%;
+    word-wrap: break-word;
+    font-weight: normal;
+    font-size: 0.7em;
+    margin: unset !important;
+}
+
+.revjs-function-help {
+    max-width: 50em;
+    max-height: 30em;
+    font-size: x-small;
+    display: inline-flex;
+    color: white;
+}
+
+.t2a-completed-functionparam {
+    background-color: lawngreen;
+    color: black;
+}
+
+.revjs-code-container {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.revjs-menu {
+    position: absolute;
+    margin: unset;
+    background-image: -webkit-linear-gradient(top, #1880b3 0%, #204b5d 100%);
+    background-image: -o-linear-gradient(top, #1880b3 0%, #204b5d 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#1880b3), to(#204b5d));
+    background-image: linear-gradient(to bottom, #1880b3 0%, #204b5d 100%);
+}
+
+.revjs-menu-button {
+    background-image: -webkit-linear-gradient(top, #1880b3 0%, #204b5d 100%);
+    background-image: -o-linear-gradient(top, #1880b3 0%, #204b5d 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#1880b3), to(#204b5d));
+    background-image: linear-gradient(to bottom, #1880b3 0%, #204b5d 100%);
+    color: white;
+    font-size: 0.8em;
+    border: none;
+    cursor: pointer;
+    margin: 0px !important;
+    width: 40px;
+    font-family: system-ui !important;
+}
+
+.revjs-menu-button:hover, .revjs-menu-button:focus {
+    background-color: #000000;
+    outline: 0 !important;
+    color: black;
+}
+
+.revjs-menu-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.revjs-menu-content { 
+    display: none; 
+    position: absolute; 
+    background-color: #f1f1f1; 
+    min-width: 12vw; 
+    overflow: auto; 
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); 
+    z-index: 5; 
+    cursor: pointer; 
+} 
+.revjs-menu-content a { 
+    color: black; 
+     padding: 2px; 
+    text-decoration: none; 
+    display: block; 
+    width: inherit; 
+    height: inherit; 
+    font-size: 12px; 
+    font-family: system-ui !important; 
+    padding-left: 5px; 
+} 
+.revjs-menu-content a:hover { 
+    background-color: #2980B9;
+    color: white; 
+} 
+.revjs-menu-content-show {display: block;}
