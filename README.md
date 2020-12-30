@@ -28,7 +28,7 @@ yarn build
 This step would create the distribution under `dist/` folder. Open `dist/index.html` 
 to view the demo page.
 
-* Show demo
+* Run the demo (OPTIONAL)
 
 `yarn start`
 
