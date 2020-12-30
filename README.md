@@ -28,6 +28,10 @@ yarn build
 This step would create the distribution under `dist/` folder. Open `dist/index.html` 
 to view the demo page.
 
+* Show demo
+
+`yarn start`
+
 * Copy or Import `dist/revitalace.min.js` to your project
 
 * Add revitalace option to Ace editor initialization
