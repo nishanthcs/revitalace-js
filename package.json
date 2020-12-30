@@ -7,9 +7,9 @@
     "node-fetch": false
   },
   "scripts": {
-    "build": "yarn clean && webpack --mode production",
-    "start": "yarn build && webpack serve --mode production",
-    "clean": "rm -rf dist"
+    "build": "yarn nuke && webpack --mode production",
+    "start": "webpack serve --mode production --host 0.0.0.0 --hot --open --useLocalIp",
+    "nuke": "rm -rf dist"
   },
   "keywords": [],
   "author": "Nishanth Shyamsundar",
@@ -22,11 +22,16 @@
     "husky": "^4.3.6",
     "raw-loader": "^4.0.2",
     "tern": "^0.24.3",
-    "webpack": "5.2.0",
-    "webpack-cli": "4.2.0",
-    "webpack-dev-server": "^3.11.0"
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.0",
+    "webpack-dev-server": "^3.11.1"
   },
   "dependencies": {
     "@commitlint/config-conventional": "^11.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }
