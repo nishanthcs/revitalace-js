@@ -26,7 +26,7 @@ yarn build
 ~~~~
 
 This step would create the distribution under `dist/` folder. Open `dist/index.html` 
-to view demo page.
+to view the demo page.
 
 * Copy or Import `dist/revitalace.min.js` to your project
 
