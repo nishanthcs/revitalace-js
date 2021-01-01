@@ -1,5 +1,5 @@
 # revitalace-js
-Active JavaScript code completion and interactive, programmable menu bar for Ace Editor which is the industry standard for online code editing. Using the power of Tern library.
+Active JavaScript code completion and interactive, programmable menu bar for the Ace Editor using the power of Tern library.
 
 ## <a href="https://nishanthcs.github.io/revitalace-js/" target="_blank">Demo</a>
 
