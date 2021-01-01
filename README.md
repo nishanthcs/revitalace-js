@@ -20,28 +20,30 @@ A pluggable module for Ace editor that modifies it to include
 
 ### Installation
 
-* Clone the repository
+1. Clone the repository
 
-`git clone git@github.com:nishanthcs/revitalace-js.git `
+    `git clone git@github.com:nishanthcs/revitalace-js.git `
 
-* Build the repository ( use yarn or npm)
+2.  Build the repository ( use yarn or npm)
 
-~~~~
-cd revitalace-js
-yarn install
-yarn build
-~~~~
+    ~~~~
+    cd revitalace-js
+    yarn install
+    yarn build
+    ~~~~
 
 This step would create the distribution under `dist/` folder. Open `dist/index.html`
 to view the demo page.
 
-* Run the demo (OPTIONAL)
+3. Run the demo (OPTIONAL)
 
-`yarn start`
+   `yarn start`
 
 * Copy or Import `dist/revitalace.min.js` to your project
 
-* Add revitalace option to Ace editor initialization
+### Usage
+
+* Add `revitalAceJS` option to Ace editor initialization.
     * Quick enabling
         ```js
         editor.setOptions({
