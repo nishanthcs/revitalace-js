@@ -61,7 +61,7 @@ to view the demo page.
             }
         });
         ```
-    * Boostrap live completion with [tern definitions](https://ternjs.net/doc/manual.html#typedef)
+    * Boostrap live completion with [tern definitions](https://ternjs.net/doc/manual.html#typedef) . This would allow static code completion.
         ```js
         let ternDef = {
               "!name" : "MyDefinition",
