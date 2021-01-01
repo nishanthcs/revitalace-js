@@ -1,6 +1,8 @@
 # revitalace-js
 Active JavaScript code completion for Ace Editor which is the industry standard for online code editing. Using the power of Tern library.
 
+## <a href="https://nishanthcs.github.io/revitalace-js/" target="_blank">Demo</a>
+
 ## Why?
 A pluggable module for Ace editor that modifies it to include
 
@@ -25,7 +27,7 @@ yarn install
 yarn build
 ~~~~
 
-This step would create the distribution under `dist/` folder. Open `dist/index.html` 
+This step would create the distribution under `dist/` folder. Open `dist/index.html`
 to view the demo page.
 
 * Run the demo (OPTIONAL)
@@ -98,7 +100,10 @@ to view the demo page.
              }
         });
         ```
-    
+
+
+### Styles
+Refer to sample stylesheet under `src/style/tooltip.css`. Override default styles by adding classes with the same name.
 
 
 ## References`
