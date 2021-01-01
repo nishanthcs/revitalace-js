@@ -105,6 +105,13 @@ to view the demo page.
 ### Styles
 Refer to sample stylesheet under `src/style/tooltip.css`. Override default styles by adding classes with the same name.
 
+### Whats next?
+There is lot to do including code quality improvements so any help is welcome. 
+* Caching completion results
+* Turning features on/off via options
+* Testing and bug fixes
+
+Feel free to create issues here if found any. 
 
 ## References`
 
