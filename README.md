@@ -39,7 +39,7 @@ to view the demo page.
 
    `yarn start`
 
-* Copy or Import `dist/revitalace.min.js` to your project
+4. Copy or Import `dist/revitalace.min.js` to your project
 
 ### Usage
 
