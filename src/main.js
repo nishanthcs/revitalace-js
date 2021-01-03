@@ -7,7 +7,7 @@ import fetchDefinition from "./support/support_meta";
  * Improvements - Fork and pull request.
  * @license MIT
  * @author Nishanth S
- * @version 1.0
+ * @version 1.1
  */
 // Global ternToAce Server
 var GlobalTernServer = null;
