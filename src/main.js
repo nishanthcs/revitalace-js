@@ -1304,7 +1304,7 @@ var GlobalTernServer = null;
 		 * @param menuItems - Array of Menu objects
 		 */
 		self.setUpMenu = function(editor, menuItems) {
-			if(!menuItems.length)	return;
+			if(!menuItems || !menuItems.length)	return;
 			let container = editor.renderer.container;
 			let parent = container.parentElement;
 			let isMac = domHelper.isMac();
