@@ -15,19 +15,30 @@ var editor = ace.edit("testedit", {
  * Sample tern definition
  * @type {{"!name": string, MyObject: {greet: {"!type": string, "!url": string, "!doc": string}}}}
  */
-let def = {
-	"!name" : "MyDefinition",
-	"MyObject" : {
-		"greet" : {
+let queryDef = {
+	"!name" : "payloadQueryType",
+	"payload" : {
+		"getQuery" : {
 			"!type" : "fn(arg:string)->string",
 			"!url": "https://foobar.foo/greet",
-			"!doc": "Returns a greeting in English for the passed First Name."
+			"!doc": "Returns the query"
+		}
+	}
+};
+
+let responseDef = {
+	"!name" : "responseType",
+	"payload" : {
+		"getResponse" : {
+			"!type" : "fn(arg:string)->string",
+			"!url": "https://foobar.foo/greet",
+			"!doc": "Returns a response object."
 		}
 	}
 };
 
 let defObject = {
-	defJSON : def,
+	defJSON : queryDef,
 	atFront : true
 };
 
@@ -38,11 +49,11 @@ let urlDefObject = {
 };
 
 // Set editor options example - all options
-editor.setOptions({
+/*editor.setOptions({
 	revitalAceJS: {
-		dependentCode : "/**\n" +
+		dependentCode : "/!**\n" +
 		" * This object is part of the dependent code added via 'defs'\n" +
-		" */\n" +
+		" *!/\n" +
 		"var dependentObject = {\n" +
 		"m : 'JS has -infinity and infinity'\n" +
 		"}",
@@ -60,12 +71,18 @@ editor.setOptions({
 					{label: "Paste", shortCut: {mac : 'Ctrl-Space', win: 'Ctrl-Space'}, trigger: function(editor){alert("Paste clicked")}}]
 			}]
 	}
-});
+});*/
 
 // Basic option
 /*editor.setOptions({
 	revitalAceJS: true
 })*/
+
+editor.setOptions({
+	revitalAceJS: {
+		defs: defObject
+	}
+});
 
 
 // Sample code in the demo
@@ -74,3 +91,19 @@ editor.setOptions({
 editor.$blockScrolling = Infinity;
 editor.getSession().getSelection().clearSelection();
 editor.focus();
+
+
+
+
+// Dynamically switch options
+changeMod = () => {
+    alert("Edit option changed!");
+	editor.setOptions({
+		revitalAceJS: {
+			defs: {
+				defJSON : responseDef,
+				atFront : true
+			}
+		}
+	});
+};
