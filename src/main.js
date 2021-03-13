@@ -7,6 +7,7 @@ import fetchDefinition from "./support/support_meta";
  * Improvements - Fork and pull request.
  * @license MIT
  * @author Nishanth S
+ * @version 1.2
  */
 // Global ternToAce Server
 var GlobalTernServer = null;
@@ -41,10 +42,12 @@ var GlobalTernServer = null;
 	 * @param {array} defs - Array of definition objects
 	 * @param {string} dependentCode - Parent code for dependency tree.
 	 * @param {array|object} menuItems - Array of menu items
+	 * @param {function} completionsCallBack - call this function while completing
+	 * @param {object} revitalAceJSOptions - general options
 	 * @param {boolean} logit - Troubleshoot logger.
 	 */
-	function prepareEditor(editor,ternPerEditor, defs, dependentCode, menuItems, logit) {
-		let ternToAce = new TernToAce(ternPerEditor);
+	function prepareEditor(editor,ternPerEditor, defs, dependentCode, menuItems, completionsCallBack, revitalAceJSOptions, logit) {
+		let ternToAce = new TernToAce(ternPerEditor, revitalAceJSOptions || {}, logit);
 		let viewHelper = new ViewHelper(editor, aceHelper, logit);
 		loadStyles(viewHelper);
 		if(dependentCode){
@@ -62,6 +65,7 @@ var GlobalTernServer = null;
 			ternServer : ternToAce,
 			view : viewHelper,
 			cache : {},
+			completionsCallBack: completionsCallBack?completionsCallBack:(es,line,c)=>c,
 			cursorpos : {
 				cursorX : 0,
 				cursorY : 0,
@@ -138,6 +142,12 @@ var GlobalTernServer = null;
 											break;
 										case 'menu':
 											var menuItems = ternConfigParameter[key];
+											break;
+										case 'completionsCallback'	:
+											var completionsCallback = ternConfigParameter[key];
+											break;
+										case 'options' :
+											var revitalAceJSOptions = ternConfigParameter[key];
 									}
 								}
 							}
@@ -157,7 +167,7 @@ var GlobalTernServer = null;
 							aceHelper.addDefaultTriggerCompleter(this, {win: "Ctrl-Space", mac: "Ctrl-Space"}, autocompleteDefinition);
 							this.commands.on('afterExec', doTernAutoComplete);
 							// Prepare editor, add events.
-							prepareEditor(this, ternPerEditor, defs, dependentCode, menuItems, false);
+							prepareEditor(this, ternPerEditor, defs, dependentCode, menuItems, completionsCallback, revitalAceJSOptions, false);
 						}
 						else {
 							this.commands.removeListener('afterExec', doTernAutoComplete);
@@ -439,15 +449,18 @@ var GlobalTernServer = null;
 
 				return aceResponse;
 			},
-			getCompletions : function(editor){
+			getCompletions : function(editor, session, prefix){
 				let self = this;
 				let returnCompletion = [];
 				let editorTern = editor.terned;
+				let pos = editor.getCursorPosition();
+				let line = editor.session.getLine(pos.row);
 
 				return new Promise(function (resolve, reject) {
 					// query the already existing source.
 					editorTern.ternServer.requestCompletion(editorTern.sourceName, editorTern.end, null, function (err, data) {
 						returnCompletion = self.mapResponse(data);
+						returnCompletion = editorTern.completionsCallBack(session, line, returnCompletion, {startColumn: data.start, endColumn: data.end});
 						if(returnCompletion.length !== 0){
 							resolve(returnCompletion);
 						}
@@ -501,15 +514,21 @@ var GlobalTernServer = null;
 			gatherCompletions : processCompletions,
 			getCompletionPrefix : getPrefix,
 			//regex = regex ||  /[a-zA-Z_0-9\(\,\s\$\-\u00A2-\uFFFF]/;
-			retrievePrecedingIdentifier : function(text, pos, regex) {
+			retrievePrecedingIdentifier : function(text, pos, regex, addSymbol) {
 				// \u002E
 				regex = regex ||  /[a-zA-Z_0-9\$\-\u00A2-\uFFFF]/;
+				const symbolRegex = /\./;
 				let buf = [];
 				for (let i = pos-1; i >= 0; i--) {
 					if (regex.test(text[i]))
 						buf.push(text[i]);
-					else
+					else if(addSymbol){
+						if(!symbolRegex.test(text[i]))
+							break;
+					}else {
 						break;
+					}
+
 				}
 				return buf.reverse().join("");
 			},
@@ -539,7 +558,7 @@ var GlobalTernServer = null;
 			let pos = editor.getCursorPosition();
 
 			let prefix = getPrefix(editor);
-			let prefixNoSymbol = getPrefix(editor,true);
+			let prefixNoSymbol = getPrefix(editor,'default');
 
 			this.base = session.doc.createAnchor(pos.row, pos.column - prefixNoSymbol.length);
 			this.base.$insertRight = true;
@@ -579,12 +598,12 @@ var GlobalTernServer = null;
 						}
 					}.bind(helperObject));
 
-					prefix =  prefix || helperObject.retrievePrecedingIdentifier(line, pos.column);
+					prefix =  prefix || helperObject.retrievePrecedingIdentifier(line, pos.column,null, false);
 					break;
 
 				case 'function':
 					//changeme Improve function pattern
-					prefix =  helperObject.retrievePrecedingIdentifier(line, pos.column, /[a-zA-Z_0-9\(\)\"\'\{\}\s\,\$\-\u00A2-\uFFFF]/);
+					prefix =  helperObject.retrievePrecedingIdentifier(line, pos.column, /[a-zA-Z_0-9\(\)\"\'\{\}\s\,\$\-\u00A2-\uFFFF]/, false);
 					let functionPattern = /^\s*[a-zA-Z0-9]+\(([a-zA-Z0-9\_\"\']+\s*\,\s*)*$/g;
 
 					if(!functionPattern.test(prefix) || prefix.contains){
@@ -606,9 +625,10 @@ var GlobalTernServer = null;
 	 * @param tern
 	 * @return {*}
 	 */
-	function TernToAce(ternPerEditor, logIt, ternOptions){
+	function TernToAce(ternPerEditor, revitalAceJSOptions, logIt){
 		"use strict"
 		let self = this;
+		let ternOptions = {};
 		// -------- Default Completion values. --------
 		// Default timeout for completion requests in ms.
 		let defaultCompletionRequestTimeout = 10000;
@@ -650,7 +670,9 @@ var GlobalTernServer = null;
 				doc_comment : {
 					strong : true
 				}
-			}
+			},
+			useBrowserDefs : true,
+			useEcmaDefs: true
 		};
 		// Default get definition settings. Tern defaults.
 		let defaultDefinitionSettings = {
@@ -665,7 +687,7 @@ var GlobalTernServer = null;
 			return;
 		}
 
-		ternOptions = ternOptions || defaultTernOptions;
+		ternOptions = revitalAceJSOptions.ternOptions || defaultTernOptions;
 
 		let ternServer = null;
 		// Get definitions
@@ -676,15 +698,22 @@ var GlobalTernServer = null;
 			ternServer = GlobalTernServer;
 		}
 
-		fetchDefinition("browser").then(function (value) {
+		// Options to load browser and ecma definitions are by default turned on but can be disabled as part of editor options.
+		if((revitalAceJSOptions.useBrowserDefs === undefined || revitalAceJSOptions.useBrowserDefs === true )
+			&& ternOptions.useBrowserDefs){
+			fetchDefinition("browser").then(function (value) {
 					// Start the tern server
 					ternServer.addDefs(value, false);
-		});
-		fetchDefinition("ecma").then(function (value) {
-			// Start the tern server
-			ternServer.addDefs(value,false);
-		});
+			});
+		}
 
+		if((revitalAceJSOptions.useEcmaDefs === undefined || revitalAceJSOptions.useEcmaDefs === true )
+			&& ternOptions.useEcmaDefs){
+			fetchDefinition("ecma").then(function (value) {
+				// Start the tern server
+				ternServer.addDefs(value,false);
+			});
+		}
 
 		if (!ternServer) {
 			if(logIt) console.error("Tern Server could not be started");
@@ -1303,7 +1332,7 @@ var GlobalTernServer = null;
 		 * @param menuItems - Array of Menu objects
 		 */
 		self.setUpMenu = function(editor, menuItems) {
-			if(!menuItems.length)	return;
+			if(!menuItems || !menuItems.length)	return;
 			let container = editor.renderer.container;
 			let parent = container.parentElement;
 			let isMac = domHelper.isMac();
