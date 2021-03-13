@@ -47,6 +47,16 @@ editor.setOptions({
 		"m : 'JS has -infinity and infinity'\n" +
 		"}",
 		defs : defObject,
+		/**
+		 * This is a function will be called for every completion. Add or remove
+		 * tern completions in this callback and return.
+		 *
+		 * The below params are injected by revitalace.
+		 * @param editorSession - Ace edit session object
+		 * @param currentLine - Current line where the completion is triggered
+		 * @param completions - Array of completions resolved by tern
+		 * @return completions - Array of completions updated in this callback
+		 */
 		completionsCallback: (editorSession, currentLine, completions) => {
 			console.log('Completion Line' + currentLine);
 			console.log(JSON.stringify(completions));

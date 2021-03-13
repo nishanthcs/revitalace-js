@@ -119,7 +119,7 @@ to view the demo page.
             }
         });
         ```
-  * Switch of ECMA and BROWSER suggestion while completing using `options`
+  * Switch off ECMA and BROWSER suggestions while completing using `options`
        ```js
        editor.setOptions({
            revitalAceJS: {
