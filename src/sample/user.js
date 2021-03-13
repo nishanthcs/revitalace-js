@@ -47,6 +47,25 @@ editor.setOptions({
 		"m : 'JS has -infinity and infinity'\n" +
 		"}",
 		defs : defObject,
+		completionsCallback: (editorSession, currentLine, completions) => {
+			console.log('Completion Line' + currentLine);
+			console.log(JSON.stringify(completions));
+			completions.push(
+				{    "name":"completionsCallback",
+					"value":"completionsCallback",
+					"meta":"completionsCallback",
+					"score":1,
+					"doc":"This custom completion was injected dynamically using the completionsCallback",
+					"type":"function",
+					"url":"https://developer.mozilla.org/en/docs/"
+				});
+
+			return completions;
+		},
+		options: {
+			useEcmaDefs: true,
+			useBrowserDefs: true
+		},
 		menu : [{
 			label : "File",
 			subMenu : [{label: "Find", shortCut: {mac : 'Cmd-f', win: 'Ctrl-f'}, trigger: function(editor){
@@ -63,9 +82,9 @@ editor.setOptions({
 });
 
 // Basic option
-/*editor.setOptions({
-	revitalAceJS: true
-})*/
+// editor.setOptions({
+// 	revitalAceJS: true
+// });
 
 
 // Sample code in the demo

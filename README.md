@@ -86,6 +86,52 @@ to view the demo page.
             }
         });
         ```
+    * Override completions using the completion callback option `completionsCallback`
+        ```js
+        editor.setOptions({
+            revitalAceJS: {
+                /**
+                 * This is a function will be called for every completion. Add or remove 
+                 * tern completions in this callback and return. 
+                 * 
+                 * The below params are injected by revitalace.
+                 * @param editorSession - Ace edit session object
+                 * @param currentLine - Current line where the completion is triggered
+                 * @param completions - Array of completions resolved by tern
+                 * @return completions - Array of completions updated in this callback
+                 */
+                completionsCallback: (editorSession, currentLine, completions) => {
+                    console.log('Completion Line' + currentLine);
+                    console.log(JSON.stringify(completions));
+                    // Here we add a new entry to every completion list. 
+                    completions.push(
+                        {    "name":"completionsCallback",
+                            "value":"completionsCallback",
+                            "meta":"completionsCallback",
+                            "score":1,
+                            "doc":"This custom completion was injected dynamically using the completionsCallback",
+                            "type":"function",
+                            "url":"https://developer.mozilla.org/en/docs/"
+                        });
+        
+                    return completions;
+                }
+            }
+        });
+        ```
+  * Switch of ECMA and BROWSER suggestion while completing using `options`
+       ```js
+       editor.setOptions({
+           revitalAceJS: {
+               options: {
+                   // ECMA based suggestions can be switched off from suggestions by  flipping this flag
+                   useEcmaDefs: true, //default true
+                   // BROWSER based suggestions can be switched off from suggestions by  flipping this flag
+                   useBrowserDefs: true // default true
+               }
+           }
+       });
+       ```
     * Add interactive menu bar and menu items with actions
         ```js
         editor.setOptions({
