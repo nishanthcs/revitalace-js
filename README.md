@@ -132,8 +132,8 @@ to view the demo page.
            }
        });
        ```
-    * Add interactive menu bar and menu items with actions
-        ```js
+  * Add interactive menu bar and menu items with actions
+    ```js
         editor.setOptions({
             revitalAceJS: {
                 menu : [
