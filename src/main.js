@@ -7,7 +7,7 @@ import fetchDefinition from "./support/support_meta";
  * Improvements - Fork and pull request.
  * @license MIT
  * @author Nishanth S
- * @version 1.2
+ * @version 1.3
  */
 // Global ternToAce Server
 var GlobalTernServer = null;
@@ -37,58 +37,72 @@ var GlobalTernServer = null;
 
 	/**
 	 * Set up the editor, ternServer, listeners, completers.
-	 * @param {obj} editor - Ace editor object
-	 * @param {boolean} ternPerEditor - true if one tern server per editor
-	 * @param {array} defs - Array of definition objects
-	 * @param {string} dependentCode - Parent code for dependency tree.
-	 * @param {array|object} menuItems - Array of menu items
-	 * @param {function} completionsCallBack - call this function while completing
-	 * @param {object} revitalAceJSOptions - general options
-	 * @param {boolean} logit - Troubleshoot logger.
+	 * @param {obj} prepObject - prepObject
+	 * {obj} editor - Ace editor object
+	 * {boolean} ternPerEditor - true if one tern server per editor
+	 * {array} defs - Array of definition objects
+	 * {string} dependentCode - Parent code for dependency tree.
+	 * {array|object} menuItems - Array of menu items
+	 * {function} completionsCallBack - call this function while completing
+	 * {function} tooltipCallBack - call this function during tooltip render
+	 * {object} revitalAceJSOptions - general options
+	 * {boolean} logit - Troubleshoot logger.
 	 */
-	function prepareEditor(editor,ternPerEditor, defs, dependentCode, menuItems, completionsCallBack, revitalAceJSOptions, logit) {
+	function prepareEditor(prepObject) {
+		const {
+			editor,
+			ternPerEditor,
+			defs,
+			dependentCode,
+			menuItems,
+			completionsCallBack,
+			tooltipCallBack,
+			revitalAceJSOptions,
+			logit
+		} = prepObject;
 		let ternToAce = new TernToAce(ternPerEditor, revitalAceJSOptions || {}, logit);
 		let viewHelper = new ViewHelper(editor, aceHelper, logit);
 		loadStyles(viewHelper);
-		if(dependentCode){
-			ternToAce.addSource(editor.id+'_parent', dependentCode);
+		if (dependentCode) {
+			ternToAce.addSource(editor.id + '_parent', dependentCode);
 		}
-		ternToAce.addSource(editor.id, editor.getValue(), dependentCode?editor.id+'_parent':null,dependentCode || "");
+		ternToAce.addSource(editor.id, editor.getValue(), dependentCode ? editor.id + '_parent' : null, dependentCode || "");
 		ternToAce.addDefs(defs);
 
 		// Create a property inside the editor to hold tern specific objects.
-		editor["terned"]= {
-			sourceName : editor.id,
-			changed : false,
-			start : {line: 0, ch: 0},
-			end : {line: 0, ch: 0},
-			ternServer : ternToAce,
-			view : viewHelper,
-			cache : {},
-			completionsCallBack: completionsCallBack?completionsCallBack:(es,line,c)=>c,
-			cursorpos : {
-				cursorX : 0,
-				cursorY : 0,
-				rawX : 0,
-				rawY : 0
+		editor["terned"] = {
+			sourceName: editor.id,
+			changed: false,
+			start: {line: 0, ch: 0},
+			end: {line: 0, ch: 0},
+			ternServer: ternToAce,
+			view: viewHelper,
+			cache: {},
+			completionsCallBack: completionsCallBack ? completionsCallBack : (es, line, c) => c,
+			tooltipCallBack: tooltipCallBack ? tooltipCallBack : (es, token, c, errors) => c,
+			cursorpos: {
+				cursorX: 0,
+				cursorY: 0,
+				rawX: 0,
+				rawY: 0
 			}
 		};
 
-		editor.getSession().on("change", function(e){
+		editor.getSession().on("change", function (e) {
 			// Register any changes to the editor so that tern source can be updated.
-			if(e.action === 'insert' || e.action === 'remove'){
+			if (e.action === 'insert' || e.action === 'remove') {
 				//console.log('Start : '+JSON.stringify(e.start)+'\nEnd : '+JSON.stringify(e.end));
 				editor.terned.changed = true;
-				ternToAce.addSource(editor.id,editor.getValue(), dependentCode?editor.id+'_parent': null, null);
+				ternToAce.addSource(editor.id, editor.getValue(), dependentCode ? editor.id + '_parent' : null, null);
 				// Start and end have to be inverted for backspaces
-				let st = {line : e.start.row, ch : e.start.column};
-				let ed = {line : e.end.row,ch : e.end.column};
-				editor.terned.start = e.action === 'remove'?ed:st;
-				editor.terned.end = e.action === 'remove'?st:ed;
+				let st = {line: e.start.row, ch: e.start.column};
+				let ed = {line: e.end.row, ch: e.end.column};
+				editor.terned.start = e.action === 'remove' ? ed : st;
+				editor.terned.end = e.action === 'remove' ? st : ed;
 			}
 		});
 		// Record co ordinates when mouse is moved.
-		editor.on("mousemove",function(e){
+		editor.on("mousemove", function (e) {
 			let character = editor.renderer.screenToTextCoordinates(e.x, e.y);
 			editor.terned.cursorpos.cursorX = character.row;
 			editor.terned.cursorpos.cursorY = character.column;
@@ -97,7 +111,7 @@ var GlobalTernServer = null;
 		});
 
 		// Setup tooltip, menu
-		viewHelper.setUpTooltip(editor,aceHelper);
+		viewHelper.setUpTooltip(editor, aceHelper);
 		viewHelper.setUpMenu(editor, menuItems);
 		// Setup definition trigger
 		aceHelper.setUpDefinition(editor);
@@ -144,7 +158,10 @@ var GlobalTernServer = null;
 											var menuItems = ternConfigParameter[key];
 											break;
 										case 'completionsCallback'	:
-											var completionsCallback = ternConfigParameter[key];
+											var completionsCallBack = ternConfigParameter[key];
+											break;
+										case 'tooltipCallBack'	:
+											var tooltipCallBack = ternConfigParameter[key];
 											break;
 										case 'options' :
 											var revitalAceJSOptions = ternConfigParameter[key];
@@ -167,7 +184,16 @@ var GlobalTernServer = null;
 							aceHelper.addDefaultTriggerCompleter(this, {win: "Ctrl-Space", mac: "Ctrl-Space"}, autocompleteDefinition);
 							this.commands.on('afterExec', doTernAutoComplete);
 							// Prepare editor, add events.
-							prepareEditor(this, ternPerEditor, defs, dependentCode, menuItems, completionsCallback, revitalAceJSOptions, false);
+							prepareEditor({
+								editor: this,
+								ternPerEditor,
+								defs,
+								dependentCode,
+								menuItems,
+								completionsCallBack,
+								tooltipCallBack,
+								revitalAceJSOptions,
+								logit: false});
 						}
 						else {
 							this.commands.removeListener('afterExec', doTernAutoComplete);
@@ -887,12 +913,15 @@ var GlobalTernServer = null;
 			 * @param {string} [obj.sourceName] - Source Name
 			 * @param {object} [obj.pos] - Position object {line : 10, ch: 1}
 			 * @param {function} [obj.callback] - callback(errors, result)
+			 * @param {object} [obj.editor] - editor object
 			 */
 			getTooltipInfo : function (input) {
 				let result = {};
 				let finalCallback = input.callback;
 				let thisObj = this;
 				let errors = {};
+				const editorSession = input.editor.getSession();
+				const tokenAtPos = editorSession.getTokenAt(input.pos.line, input.pos.ch);
 
 				thisObj.requestType(input.sourceName,input.pos,function(typeErr,typeData){
 					if(typeErr){
@@ -914,7 +943,7 @@ var GlobalTernServer = null;
 							else if(refData.refs){
 								result.refs = refData.refs
 							}
-							finalCallback(errors, result);
+							finalCallback(errors, input.editor.terned.tooltipCallBack(editorSession, tokenAtPos, result, errors));
 						});
 					});
 				},null,null,0);
@@ -1293,6 +1322,7 @@ var GlobalTernServer = null;
 			ternToAce.getTooltipInfo({
 				sourceName: editor.terned.sourceName,
 				pos: {line: pos.cursorX, ch: pos.cursorY},
+				editor,
 				callback: function (err, data) {
 					if (data && Object.keys(data).length) {
 						let toolTipNode = lViewHelper.buildDOMNode("tooltipType", data, null,
