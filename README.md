@@ -119,6 +119,37 @@ to view the demo page.
             }
         });
         ```
+  * Customize tooltip content dynamically by using the tooltip callback option `tooltipCallBack`
+      ```js
+      editor.setOptions({
+          revitalAceJS: {
+            /**
+             * This is a function will be called for every tool tip render. modify result and return.
+             *
+             * In this example, every doc element will be replaced with text 'Where is Waldo' :o)
+             *
+             * The below params are injected by revitalace.
+             * @param editorSession - Ace edit session object
+             * @param currentToken - Current token ace object where the completion is triggered
+             * @param toolTipInfo - Result object compiled by revitalace
+             * @return toolTipInfo - Final result that would be used to render the tooltip
+             */
+            tooltipCallBack: (editorSession, currentToken, toolTipInfo) => {
+                console.log('Tooltip Token' + currentToken.value);
+                console.log(JSON.stringify(toolTipInfo));
+                // Update the doc here.
+                const customizedToolTipInfo = {
+                    type: "fn(input: ?)",
+                    name: "getTooltipInfo",
+                    doc: "Where is Waldo?",
+                    def: toolTipInfo.def,
+                    refs: toolTipInfo.refs
+                }
+                return customizedToolTipInfo;
+            }
+          }
+      });
+      ```
   * Switch off ECMA and BROWSER suggestions while completing using `options`
        ```js
        editor.setOptions({
