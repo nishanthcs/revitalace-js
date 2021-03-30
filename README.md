@@ -197,11 +197,15 @@ There is lot to do including code quality improvements so any help is welcome.
 
 Feel free to create issues here if found any. 
 
-## References`
+## References
 
 __[Ace](https://ace.c9.io/)__ - Official Website
 
 __[Tern](https://ternjs.net/doc/manual.html)__ - Official Website
 
+## Thanks
 
+[__![JetBrains](src/images/jetbrains-variant-4.svg)__](https://www.jetbrains.com/)
+
+[JetBrains Open Source](https://www.jetbrains.com/opensource/)
 
