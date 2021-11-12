@@ -4,7 +4,7 @@ Active JavaScript code completion and interactive, programmable menu bar for the
 ## <a href="https://nishanthcs.github.io/revitalace-js/" target="_blank">Demo</a>
 
 ## Why?
-Ace editor is an online code editor library that is widely used by the industry majors ( AWS, Wikipedia, Google and more) to surface code editing capability in their pages. Though great, the code editing experience is not comparable to the same that we get from established IDEs like WebStorm or VSCode. Using revitalace-JS, JS coding experience in Ace can be improved with active code completion and interactive tool tips. Hoping to add more.
+Ace editor is an online code editor library that is widely used by the industry majors ( AWS, Wikipedia, Google and more) to surface code editing capability in their pages. Though great, the code editing experience is not as user friendly as WebStorm or VSCode. Using revitalace-JS, JS coding experience in Ace can be improved with active code completion and interactive tool tips. Hoping to add more.
 
 Ideas, fixes and contributions welcome!. Need testers too.
 
