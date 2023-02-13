@@ -36,8 +36,15 @@ module.exports = {
     },
     devServer: {
         compress: true,
-        port: 9000,
-        publicPath: '/',
+        port: 9001,
+        static: {
+            publicPath: '/',
+        },
         open: true
+    },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 750000,
+        maxAssetSize: 750000
     }
 };
