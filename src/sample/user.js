@@ -57,21 +57,21 @@ editor.setOptions({
 		 * @param completions - Array of completions resolved by tern
 		 * @return completions - Array of completions updated in this callback
 		 */
-		completionsCallback: (editorSession, currentLine, completions) => {
-			console.log('Completion Line' + currentLine);
-			console.log(JSON.stringify(completions));
-			completions.push(
-				{    "name":"completionsCallback",
-					"value":"completionsCallback",
-					"meta":"completionsCallback",
-					"score":1,
-					"doc":"This custom completion was injected dynamically using the completionsCallback",
-					"type":"function",
-					"url":"https://developer.mozilla.org/en/docs/"
-				});
+		// completionsCallback: (editorSession, currentLine, completions) => {
+		// 	console.log('Completion Line' + currentLine);
+		// 	console.log(JSON.stringify(completions));
+		// 	completions.push(
+		// 		{    "name":"completionsCallback",
+		// 			"value":"completionsCallback",
+		// 			"meta":"completionsCallback",
+		// 			"score":1,
+		// 			"doc":"This custom completion was injected dynamically using the completionsCallback",
+		// 			"type":"function",
+		// 			"url":"https://developer.mozilla.org/en/docs/"
+		// 		});
 
-			return completions;
-		},
+		// 	return completions;
+		// },
 		/**
 		 * This is a function will be called for every tool tip render. modify result and return.
 		 *
@@ -83,19 +83,19 @@ editor.setOptions({
 		 * @param toolTipInfo - Result object compiled by revitalace
 		 * @return toolTipInfo - Final result that would be used to render the tooltip
 		 */
-		tooltipCallBack: (editorSession, currentToken, toolTipInfo) => {
-			console.log('Tooltip Token' + currentToken.value);
-			console.log(JSON.stringify(toolTipInfo));
-			// Update the doc here.
-			const customizedToolTipInfo = {
-				type: "fn(input: ?)",
-				name: "getTooltipInfo",
-				doc: "Where is Waldo?",
-				def: toolTipInfo.def,
-				refs: toolTipInfo.refs
-			}
-			return customizedToolTipInfo;
-		},
+		// tooltipCallBack: (editorSession, currentToken, toolTipInfo) => {
+		// 	console.log('Tooltip Token' + currentToken.value);
+		// 	console.log(JSON.stringify(toolTipInfo));
+		// 	// Update the doc here.
+		// 	const customizedToolTipInfo = {
+		// 		type: "fn(input: ?)",
+		// 		name: "getTooltipInfo",
+		// 		doc: "Where is Waldo?",
+		// 		def: toolTipInfo.def,
+		// 		refs: toolTipInfo.refs
+		// 	}
+		// 	return customizedToolTipInfo;
+		// },
 		options: {
 			useEcmaDefs: true,
 			useBrowserDefs: true
